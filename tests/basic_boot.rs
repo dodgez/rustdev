@@ -4,8 +4,8 @@
 #![test_runner(rustdev::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-use rustdev::{println, serial_print, serial_println};
 use core::panic::PanicInfo;
+use rustdev::{println, serial_print, serial_println};
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
@@ -21,7 +21,7 @@ fn panic(info: &PanicInfo) -> ! {
 
 #[test_case]
 fn test_println() {
-  serial_print!("test_println...");
-  println!("test_println output");
-  serial_println!("[ok]");
+    serial_print!("test_println...");
+    println!("test_println output");
+    serial_println!("[ok]");
 }

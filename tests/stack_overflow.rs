@@ -4,31 +4,29 @@
 
 use core::panic::PanicInfo;
 use lazy_static::lazy_static;
-use x86_64::structures::idt::InterruptDescriptorTable;
-use x86_64::structures::idt::InterruptStackFrame;
-use rustdev::serial_print;
-use rustdev::{exit_qemu, QemuExitCode, serial_println};
+use rustdev::{exit_qemu, serial_print, serial_println, QemuExitCode};
+use x86_64::structures::idt::{InterruptDescriptorTable, InterruptStackFrame};
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
-  serial_print!("stack_overflow...");
+    serial_print!("stack_overflow...");
 
-  rustdev::gdt::init();
-  init_test_idt();
+    rustdev::gdt::init();
+    init_test_idt();
 
-  stack_overflow();
+    stack_overflow();
 
-  panic!("Execution continued after stack overflow");
+    panic!("Execution continued after stack overflow");
 }
 
 #[allow(unconditional_recursion)]
 fn stack_overflow() {
-  stack_overflow();
+    stack_overflow();
 }
 
 #[panic_handler]
 fn panic(info: &PanicInfo) -> ! {
-  rustdev::test_panic_handler(info);
+    rustdev::test_panic_handler(info);
 }
 
 lazy_static! {
@@ -44,10 +42,13 @@ lazy_static! {
     };
 }
 
-extern "x86-interrupt" fn test_double_fault_handler(_stack_frame: &mut InterruptStackFrame, _error_code: u64) -> ! {
-  serial_println!("[ok]");
-  exit_qemu(QemuExitCode::Success);
-  loop {}
+extern "x86-interrupt" fn test_double_fault_handler(
+    _stack_frame: &mut InterruptStackFrame,
+    _error_code: u64,
+) -> ! {
+    serial_println!("[ok]");
+    exit_qemu(QemuExitCode::Success);
+    loop {}
 }
 
 pub fn init_test_idt() {

@@ -4,8 +4,8 @@
 #![test_runner(rustdev::test_runner)]
 #![reexport_test_harness_main = "test_main"]
 
-use rustdev::println;
 use core::panic::PanicInfo;
+use rustdev::println;
 
 #[no_mangle]
 pub extern "C" fn _start() -> ! {
