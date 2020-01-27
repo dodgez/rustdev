@@ -5,13 +5,18 @@
 #![reexport_test_harness_main = "test_main"]
 
 use core::panic::PanicInfo;
+use bootloader::{BootInfo, entry_point};
 use rustdev::println;
 
+entry_point!(kernel_main);
+
 #[no_mangle]
-pub extern "C" fn _start() -> ! {
+fn kernel_main(boot_info: &'static BootInfo) -> ! {
     println!("Hello World{}", "!");
 
     rustdev::init();
+
+    println!("{}", boot_info.physical_memory_offset);
 
     #[cfg(test)]
     test_main();
